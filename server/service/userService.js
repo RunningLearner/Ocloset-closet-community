@@ -1,11 +1,11 @@
 import cryto from "crypto";
-import User from "../models/user";
+import User from "../models/schemas/user.js";
 
 const passwordHash = (password) => {
   return cryto.createHash("sha1").update(password).digest("hex");
 };
 
-export async function signUp(email, password, name) {
+export default async function signUp(email, password, name) {
   const checkEmail = await User.findOne({ email });
 
   if (checkEmail) {

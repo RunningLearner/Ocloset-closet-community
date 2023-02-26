@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import jwtConfig from "./../config/jwtConfig.js";
 import nodeMailer from "nodemailer";
 import authmiddleware from "../util/authmiddleware.js";
-import userController from "../controller/userController";
+import userController from "../controller/userController.js";
 
 export const path = "/users";
 export const router = Router();

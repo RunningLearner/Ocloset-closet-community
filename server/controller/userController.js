@@ -1,10 +1,10 @@
-import userService from "../service/userService";
+import userService from "../service/userService.js";
 
 const passwordHash = (password) => {
   return cryto.createHash("sha1").update(password).digest("hex");
 };
 
-export async function signUp(req, res, next) {
+export default async function signUp(req, res, next) {
   try {
     const { email, password, name } = req.body;
 
