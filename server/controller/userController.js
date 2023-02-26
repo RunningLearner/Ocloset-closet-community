@@ -4,7 +4,7 @@ export default async function signUp(req, res, next) {
   try {
     const { email, password, name } = req.body;
 
-    const result = await userService.signUp(email, password, name);
+    const result = await userService(email, password, name);
 
     res.json(result);
   } catch (err) {

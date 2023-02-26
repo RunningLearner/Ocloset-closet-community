@@ -1,5 +1,5 @@
 import cryto from "crypto";
-import User from "../models/schemas/user.js";
+import { User } from "../models/index.js";
 
 const passwordHash = (password) => {
   return cryto.createHash("sha1").update(password).digest("hex");
