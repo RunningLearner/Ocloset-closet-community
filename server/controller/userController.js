@@ -1,13 +1,17 @@
-import userService from "../service/userService.js";
+export default class UserController {
+  constructor(userService) {
+    this.userService = userService;
+  }
 
-export default async function signUp(req, res, next) {
-  try {
-    const { email, password, name } = req.body;
+  async signUp(req, res, next) {
+    try {
+      const { email, password, name } = req.body;
 
-    const result = await userService(email, password, name);
+      const result = await this.userService.signUp(email, password, name);
 
-    res.json(result);
-  } catch (err) {
-    next(err);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
   }
 }

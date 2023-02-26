@@ -5,12 +5,15 @@ import jwt from "jsonwebtoken";
 import jwtConfig from "./../config/jwtConfig.js";
 import nodeMailer from "nodemailer";
 import authmiddleware from "../util/authmiddleware.js";
-import userController from "../controller/userController.js";
+import UserController from "../controller/userController.js";
+import UserService from "../service/userService.js";
 
 export const path = "/users";
 export const router = Router();
 
-router.post("/signup", userController);
+const userService = new UserService();
+const userController = new UserController(userService);
+router.post("/signup", userController.signUp.bind(userController));
 
 router.post("/login", async (req, res, next) => {
   try {
