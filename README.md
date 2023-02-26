@@ -158,3 +158,5 @@ export default class UserService {
   }
 }
 ```
+- 변경에 맞게 userService.test 도 수정하였습니다.
+- DI를 통해서 컨트롤러와 서비스간의 직접적인 의존성을 제거하였습니다.
