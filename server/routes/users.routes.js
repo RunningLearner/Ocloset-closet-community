@@ -11,7 +11,7 @@ import UserService from "../service/userService.js";
 export const path = "/users";
 export const router = Router();
 
-const userService = new UserService();
+const userService = new UserService(User);
 const userController = new UserController(userService);
 router.post("/signup", userController.signUp.bind(userController));
 

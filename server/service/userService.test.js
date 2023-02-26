@@ -1,12 +1,12 @@
 import { jest, expect, it } from "@jest/globals";
-import UserService from "../service/userService";
 import { User } from "../models";
+import UserService from "../service/userService";
 
 describe("UserService", () => {
   let userService;
 
   beforeEach(() => {
-    userService = new UserService();
+    userService = new UserService(User);
   });
 
   afterEach(() => {
