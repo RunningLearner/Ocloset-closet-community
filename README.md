@@ -10,7 +10,7 @@
 ## 2. UserService의 회원가입에 적용 해보기
 <br />
 
-### 적용 전
+### 분리 전
 
 ```
 ...
@@ -44,3 +44,21 @@ router.post("/signup", async (req, res, next) => {
 - 라우터에 컨트롤러와 서비스가 섞여있습니다...
 - 먼저 최대한 분리를 한다음
 - Awilix를 적용하겠습니다.
+<br />
+
+### 분리 후
+```
+import userService from "../service/userService.js";
+
+export default async function signUp(req, res, next) {
+  try {
+    const { email, password, name } = req.body;
+
+    const result = await userService(email, password, name);
+
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+```
