@@ -3,4 +3,7 @@
 # dependencies
 /node_modules
 /images/
+
+#jest
+coverage/
 #/config/  jwt 암호화 로직은 올리면 안되지만 개발 편의상 올리고 추후에 비공개 처리할 것!!
