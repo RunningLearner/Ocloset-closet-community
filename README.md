@@ -3,7 +3,8 @@
 
 ## 1. Awilix
 ![스크린샷_20230225_091711](https://user-images.githubusercontent.com/97277365/221360017-f8287d71-ec9d-4a85-9b85-d36edad46f0e.png)
-- inversify가 가볍고 더 강력한 DI를 제공하지만 Typescript의 데코레이터와 함께 더 시너지를 내기 때문에 Awilix를 사용합니다.
+- inversify가 가볍고 더 강력한 DI를 제공하지만 Typescript의 데코레이터와 함께 더 시너지를 내기 때문에
+- javascript와 함께 자주 쓰이는 Awilix를 사용합니다.
 <br />
 <br />
 
@@ -96,7 +97,7 @@ export default async function signUp(email, password, name) {
 - 이제는 DI를 통해 IoC를 적용하기 위해 클래스화가 필요합니다.
 <br />
 
-## 3. 리펙토링한 코드를 DI가 편하도록 클래스화
+## 3. 리펙토링한 코드에 OOP 적용
 ```javascript
 //router.js
 ...
@@ -158,5 +159,9 @@ export default class UserService {
   }
 }
 ```
-- 변경에 맞게 userService.test 도 수정하였습니다.
+- 변경에 맞게 userService.test도 수정하였습니다.
 - DI를 통해서 컨트롤러와 서비스간의 직접적인 의존성을 제거하였습니다.
+
+<br />
+
+## 4. Awilix를 통해서 IoC 구현
