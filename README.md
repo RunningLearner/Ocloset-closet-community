@@ -97,4 +97,64 @@ export default async function signUp(email, password, name) {
 <br />
 
 ## 3. 리펙토링한 코드를 DI가 편하도록 클래스화
+```javascript
+//router.js
+...
+const userService = new UserService();
+const userController = new UserController(userService);
+router.post("/signup", userController.signUp.bind(userController));
+...
+```
+```javascript
+//userController.js
+export default class UserController {
+  constructor(userService) {
+    this.userService = userService;
+  }
 
+  async signUp(req, res, next) {
+    try {
+      const { email, password, name } = req.body;
+
+      const result = await this.userService.signUp(email, password, name);
+
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+}
+```
+```javascript
+//userService.js
+import cryto from "crypto";
+import { User } from "../models/index.js";
+
+export default class UserService {
+  constructor() {}
+
+  async signUp(email, password, name) {
+    const checkEmail = await User.findOne({ email });
+
+    if (checkEmail) {
+      throw new Error("이미 가입된 이메일입니다.500");
+    }
+
+    let hashPassword = this.passwordHash(password);
+
+    await User.create({
+      email,
+      password: hashPassword,
+      name,
+    });
+
+    return {
+      result: "회원가입이 완료되었습니다. 로그인을 해주세요.",
+    };
+  }
+
+  passwordHash(password) {
+    return cryto.createHash("sha1").update(password).digest("hex");
+  }
+}
+```
