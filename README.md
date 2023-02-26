@@ -7,7 +7,7 @@
 <br />
 <br />
 
-## 2. UserService의 회원가입에 적용 해보기
+## 2. 기존의 코드에 OOP를 적용하기 위해 리펙토링
 <br />
 
 ### 분리 전
@@ -94,3 +94,7 @@ export default async function signUp(email, password, name) {
 - 컨트롤러에서 비즈니스 로직을 분리하여 서비스를 만들었습니다.
 - jest를 통해서 service 유닛테스트를 검증하였습니다.
 - 이제는 DI를 통해 IoC를 적용하기 위해 클래스화가 필요합니다.
+<br />
+
+## 3. 리펙토링한 코드를 DI가 편하도록 클래스화
+
