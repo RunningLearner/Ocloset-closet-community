@@ -17,7 +17,7 @@ const io = new Server(server, {
   },
 });
 
-mongoose.connect("mongodb://localhost:27017/Ocloset");
+mongoose.connect("mongodb://mongodb:27017/Ocloset");
 
 mongoose.connection.on("connected", () => {
   console.log("DB connect success");
