@@ -3,7 +3,7 @@ export default class UserController {
     this.userService = userService;
   }
 
-  async signUp(req, res, next) {
+  signUp = async (req, res, next) => {
     try {
       const { email, password, name } = req.body;
 
@@ -13,5 +13,5 @@ export default class UserController {
     } catch (err) {
       next(err);
     }
-  }
+  };
 }

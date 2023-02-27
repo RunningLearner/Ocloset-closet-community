@@ -13,7 +13,7 @@ export const router = Router();
 
 const userService = new UserService(User);
 const userController = new UserController(userService);
-router.post("/signup", userController.signUp.bind(userController));
+router.post("/signup", userController.signUp);
 
 router.post("/login", async (req, res, next) => {
   try {

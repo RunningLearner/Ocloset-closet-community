@@ -5,7 +5,7 @@ export default class UserService {
     this.User = User;
   }
 
-  async signUp(email, password, name) {
+  signUp = async (email, password, name) => {
     const checkEmail = await this.User.findOne({ email });
 
     if (checkEmail) {
@@ -23,7 +23,7 @@ export default class UserService {
     return {
       result: "회원가입이 완료되었습니다. 로그인을 해주세요.",
     };
-  }
+  };
 
   passwordHash(password) {
     return cryto.createHash("sha1").update(password).digest("hex");
