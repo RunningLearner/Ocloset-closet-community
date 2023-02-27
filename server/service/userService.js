@@ -25,7 +25,7 @@ export default class UserService {
     };
   };
 
-  passwordHash(password) {
+  passwordHash = (password) => {
     return cryto.createHash("sha1").update(password).digest("hex");
-  }
+  };
 }
