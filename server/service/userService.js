@@ -1,12 +1,12 @@
 import cryto from "crypto";
 
 export default class UserService {
-  constructor(User) {
-    this.User = User;
+  constructor({ user }) {
+    this.user = user;
   }
 
   signUp = async (email, password, name) => {
-    const checkEmail = await this.User.findOne({ email });
+    const checkEmail = await this.user.findOne({ email });
 
     if (checkEmail) {
       throw new Error("이미 가입된 이메일입니다.500");
@@ -14,7 +14,7 @@ export default class UserService {
 
     let hashPassword = this.passwordHash(password);
 
-    await this.User.create({
+    await this.user.create({
       email,
       password: hashPassword,
       name,

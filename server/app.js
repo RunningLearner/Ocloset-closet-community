@@ -1,10 +1,12 @@
+// import { setup } from "./di.config.js";
+// setup();
 import express from "express";
-import router from "./routes/index.js";
 import mongoose from "mongoose";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 import socket from "./util/socket.js";
+import router from "./routes/index.js";
 
 const app = express();
 const server = createServer(app);
