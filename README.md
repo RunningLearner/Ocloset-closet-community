@@ -168,3 +168,128 @@ export default class UserService {
 <br />
 
 ## 4. Awilix를 통해서 IoC 구현
+```javascript
+//routes.js
+...
+import { setup, container } from "../di.config.js";
+setup();
+
+// const userService = new UserService(User);
+// const userController = new UserController(userService); 기존에 있던 코드를 컨테이너로 대체 
+const userController = container.resolve("userController");
+router.post("/signup", userController.signUp);
+```
+```javascript
+//userController.js
+export default class UserController {
+  constructor({ userService }) {
+    this.userService = userService;
+  }
+
+  signUp = async (req, res, next) => {
+    try {
+      const { email, password, name } = req.body;
+
+      const result = await this.userService.signUp(email, password, name);
+
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
+  };
+}
+```
+```javascript
+//userService.js
+import cryto from "crypto";
+
+export default class UserService {
+  constructor({ user }) {
+    this.user = user;
+  }
+
+  signUp = async (email, password, name) => {
+    const checkEmail = await this.user.findOne({ email });
+
+    if (checkEmail) {
+      throw new Error("이미 가입된 이메일입니다.500");
+    }
+
+    let hashPassword = this.passwordHash(password);
+
+    await this.user.create({
+      email,
+      password: hashPassword,
+      name,
+    });
+
+    return {
+      result: "회원가입이 완료되었습니다. 로그인을 해주세요.",
+    };
+  };
+
+  passwordHash = (password) => {
+    return cryto.createHash("sha1").update(password).digest("hex");
+  };
+}
+```
+```javascript
+//userService.test.js
+import { jest, expect, it } from "@jest/globals";
+import UserService from "../service/userService";
+
+describe("UserService", () => {
+  let userService;
+
+  beforeEach(() => {
+    userService = new UserService({
+      user: { findOne: jest.fn(), create: jest.fn() },
+    });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  describe("signUp", () => {
+    it("should throw an error if the email is already taken", async () => {
+      userService.user.findOne.mockReturnValueOnce({
+        email: "test@test.com",
+      });
+
+      await expect(
+        userService.signUp("test@test.com", "password", "John")
+      ).rejects.toThrow("이미 가입된 이메일입니다.500");
+      expect(userService.user.findOne).toBeCalled();
+      expect(userService.user.create).not.toBeCalled();
+    });
+
+    it("should create a new user if the email is available", async () => {
+      userService.user.findOne = jest.fn(() => null);
+      userService.user.create = jest.fn((email, password, name) => {
+        return {
+          result: "회원가입이 완료되었습니다. 로그인을 해주세요.",
+        };
+      });
+
+      const result = await userService.signUp(
+        "test@test.com",
+        "password",
+        "John"
+      );
+
+      expect(userService.user.create).toHaveBeenCalledWith({
+        email: "test@test.com",
+        password: expect.any(String),
+        name: "John",
+      });
+      expect(result).toEqual({
+        result: "회원가입이 완료되었습니다. 로그인을 해주세요.",
+      });
+    });
+  });
+});
+```
+- 최종 완성 코드입입니다.
+- 레거시 코드 -> SRP 적용 (로직 분리) -> FP에서 OOP로 전환 -> DI적용 -> DI를 Awilix를 통해 자동화 하여 IoC적용
+- 중간중간 테스트 코드를 수정하였었는데, 확실히 DI를 적용한 후 의존성이 낮아지니 test를 하기 수월하였습니다.
