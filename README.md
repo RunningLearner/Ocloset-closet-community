@@ -42,7 +42,7 @@ router.post("/signup", async (req, res, next) => {
     }
 });
 ```
-- 라우터에 컨트롤러와 서비스가 섞여있습니다...
+- 라우터에 컨트롤러와 서비스가 섞여있었습니다...
 - 먼저 최대한 분리를 한다음
 - Awilix를 적용하겠습니다.
 <br />
@@ -101,7 +101,9 @@ export default async function signUp(email, password, name) {
 ```javascript
 //router.js
 ...
-const userService = new UserService();
+import { User } from "../models/index.js";
+
+const userService = new UserService(User);
 const userController = new UserController(userService);
 router.post("/signup", userController.signUp.bind(userController));
 ...
@@ -129,13 +131,14 @@ export default class UserController {
 ```javascript
 //userService.js
 import cryto from "crypto";
-import { User } from "../models/index.js";
 
 export default class UserService {
-  constructor() {}
+  constructor(User) {
+    this.User = User;
+  }
 
   async signUp(email, password, name) {
-    const checkEmail = await User.findOne({ email });
+    const checkEmail = await this.User.findOne({ email });
 
     if (checkEmail) {
       throw new Error("이미 가입된 이메일입니다.500");
@@ -143,7 +146,7 @@ export default class UserService {
 
     let hashPassword = this.passwordHash(password);
 
-    await User.create({
+    await this.User.create({
       email,
       password: hashPassword,
       name,
