@@ -1,4 +1,9 @@
 # O'closet
+## start server
+- git clone 후에 
+- docker-compose up 사용
+<br />
+
 # IoC 적용해보기
 
 ## 1. Awilix
