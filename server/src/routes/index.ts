@@ -1,13 +1,13 @@
 import { Router } from "express";
 // import * as example from './example.routes.js';
-import * as users from "./users.routes";
-import * as closet from "./closet.routes";
-import * as posts from "./posts.routes";
-import * as market from "./market.routes";
-import * as like from "./like.routes";
-import * as movepost from "./movepost.routes";
-import * as search from "./search.routes";
-import * as comment from "./comment.routes";
+import * as users from "./users.routes.js";
+import * as closet from "./closet.routes.js";
+import * as posts from "./posts.routes.js";
+import * as market from "./market.routes.js";
+import * as like from "./like.routes.js";
+import * as movepost from "./movepost.routes.js";
+import * as search from "./search.routes.js";
+import * as comment from "./comment.routes.js";
 
 import authmiddleware from "../util/authmiddleware.js";
 
