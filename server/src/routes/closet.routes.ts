@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import multer from "multer";
 import { Post, User } from "../models/index";
 import pathmodule from "path";
@@ -16,39 +16,43 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-router.post("/create", upload.single("img"), async function (req, res, next) {
-  // req.file is the name of your file in the form above, here 'uploaded_file'
-  // req.body will hold the text fields, if there were any
-  console.log(req.file);
-  if (req.file) {
-    const { type } = req.body;
-    const email = req.tokenInfo.email;
-    const category = JSON.parse(type).dressType;
-    const style = JSON.parse(type).styleType;
-    const authData = await User.findOne({ email });
-    const url = req.file.destination + pathmodule.basename(req.file.path);
+router.post(
+  "/create",
+  upload.single("img"),
+  async function (req: Request, res: Response, next: NextFunction) {
+    // req.file is the name of your file in the form above, here 'uploaded_file'
+    // req.body will hold the text fields, if there were any
+    console.log(req.file);
+    if (req.file) {
+      const { type } = req.body;
+      const email = req.tokenInfo.email;
+      const category = JSON.parse(type).dressType;
+      const style = JSON.parse(type).styleType;
+      const authData = await User.findOne({ email });
+      const url = req.file.destination + pathmodule.basename(req.file.path);
 
-    const total = await Post.countDocuments({
-      author: authData._id,
-      show: true,
-      postType: 1,
-    });
-    // console.log("--------------------\n\n\n", req.body, "\n2.\n", type,"\n3\n", email,"\n4\n", postType);
-    await Post.create({
-      postType: 1,
-      img: {
-        url: url,
-        category: category,
-        style: style,
-      },
-      views: total + 1,
-      author: authData,
-    });
-    res.json({ data: "이미지 업로드에 성공했습니다!" });
-  } else {
-    next(new Error("이미지 업로드에 실패하였습니다. 에러코드 추가필요"));
+      const total = await Post.countDocuments({
+        author: authData._id,
+        show: true,
+        postType: 1,
+      });
+      // console.log("--------------------\n\n\n", req.body, "\n2.\n", type,"\n3\n", email,"\n4\n", postType);
+      await Post.create({
+        postType: 1,
+        img: {
+          url: url,
+          category: category,
+          style: style,
+        },
+        views: total + 1,
+        author: authData,
+      });
+      res.json({ data: "이미지 업로드에 성공했습니다!" });
+    } else {
+      next(new Error("이미지 업로드에 실패하였습니다. 에러코드 추가필요"));
+    }
   }
-});
+);
 
 // 옷 정보 불러오기
 router.get("/list", async (req, res, next) => {

@@ -1,19 +1,19 @@
 import express, { NextFunction, Request, Response } from "express";
-import router from "./routes/index.js";
+// import router from "./routes/index";
 import mongoose from "mongoose";
 import { createServer } from "http";
-import { Server } from "socket.io";
+// import { Server } from "socket.io";
 import cors from "cors";
-import socket from "./util/socket.js";
+// import socket from "./util/socket";
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    credentials: true,
-  },
-});
+// const io = new Server(server, {
+//   cors: {
+//     origin: "http://localhost:3000",
+//     credentials: true,
+//   },
+// });
 
 mongoose.connect("mongodb://localhost:27017/Ocloset");
 
@@ -30,20 +30,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("images"));
 
 // socket 파일에 객체 전달
-socket(io);
+// socket(io);
 
-app.get("/welcome", (req, res) => {
+app.get("/welcome", (_req, res) => {
   res.send("welcome!");
 });
 
 // dev route
-app.use("/api", router);
+// app.use("/api", router);
 
 // 에러 핸들러
-app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
-  let error = [];
-  error = err.message.split("  ");
-  err.message = error[0];
+app.use(function (
+  err: Error,
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+) {
   console.log("errermessage:  ", err.message, "\n\nerrorcode:  ");
   res.json(err.message);
 });
