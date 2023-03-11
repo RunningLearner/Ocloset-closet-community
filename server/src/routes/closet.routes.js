@@ -1,6 +1,6 @@
 import { Router } from "express";
 import multer from "multer";
-import { Post, User } from "../models/index.js";
+import { Post, User } from "../models/index";
 import pathmodule from "path";
 
 export const path = "/closet";
