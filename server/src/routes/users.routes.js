@@ -1,6 +1,6 @@
 import { Router } from "express";
 import cryto from "crypto";
-import { User, Like, Post } from "../models/index.js";
+import { User, Like, Post } from "../models/index";
 import jwt from "jsonwebtoken";
 import jwtConfig from "../config/jwtConfig.js";
 import nodeMailer from "nodemailer";
