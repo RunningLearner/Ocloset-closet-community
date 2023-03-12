@@ -1,13 +1,79 @@
-import { Router } from "express";
-import { login, signup } from "../controller/user.js";
-import authmiddleware from "../util/authmiddleware.js";
+import cryto from "crypto";
+import { User, Like, Post } from "../models/index.js";
+import jwt from "jsonwebtoken";
+import jwtConfig from "../config/jwtConfig.js";
+import nodeMailer from "nodemailer";
+import { RequestHandler } from "express";
 
-export const path = "/users";
-export const router = Router();
+export const signup: RequestHandler = async (req, res, next) => {
+  try {
+    const { email, password, name } = req.body;
 
-router.post("/signup", signup);
+    let hashPassword = passwordHash(password);
 
-router.post("/login", login);
+    const checkEmail = await User.findOne({ email });
+
+    if (checkEmail) {
+      throw new Error("이미 가입된 이메일입니다.500");
+    }
+
+    await User.create({
+      email,
+      password: hashPassword,
+      name,
+    });
+
+    res.json({
+      result: "회원가입이 완료되었습니다. 로그인을 해주세요.",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const login: RequestHandler = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    let hashPassword = passwordHash(password);
+
+    const checkEmail = await User.findOne({ email });
+
+    if (!checkEmail) {
+      throw new Error("존재하지 않는 이메일입니다.401");
+    }
+
+    if (hashPassword !== checkEmail.password) {
+      throw new Error("비밀번호가 틀렸습니다.401");
+    }
+    jwt.sign(
+      {
+        email: email,
+        name: checkEmail.name,
+      },
+      jwtConfig.secret,
+      {
+        expiresIn: "1d", //1y,1d,2h,1m,5s
+      },
+      (err, token) => {
+        if (err) {
+          res
+            .status(401)
+            .json({ status: false, message: "로그인을 해주세요." });
+        } else {
+          res.json({
+            status: true,
+            accessToken: token,
+            email: email,
+            name: checkEmail.name,
+          });
+        }
+      }
+    );
+  } catch (err) {
+    next(err);
+  }
+};
 
 // //비밀번호 찾기 : 2번
 // router.post("/find/password", async (req, res, next) => {
@@ -68,6 +134,10 @@ router.post("/login", login);
 //     .toString()
 //     .padStart("0", 8);
 // };
+
+const passwordHash = (password: string) => {
+  return cryto.createHash("sha1").update(password).digest("hex");
+};
 
 // // 내가 올린 게시글 목록 불러오기
 // router.get("/mypost", authmiddleware, async (req, res, next) => {
