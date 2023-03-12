@@ -1,7 +1,26 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import shortId from "./type/shortId.js";
 
-const PostSchema = new mongoose.Schema(
+export interface DBPost {
+  shortId: string;
+  title: string;
+  content: string;
+  show: boolean;
+  views: number;
+  price: number;
+  postType: number;
+  img: {
+    url: {
+      type: string;
+    };
+    category: string;
+    style: string;
+  };
+  author: Types.ObjectId;
+  comments: Types.ObjectId[];
+}
+
+const PostSchema = new mongoose.Schema<DBPost>(
   {
     shortId,
     title: String,

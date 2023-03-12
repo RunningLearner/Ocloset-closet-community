@@ -143,7 +143,7 @@ const passwordHash = (password: string) => {
 // router.get("/mypost", authmiddleware, async (req, res, next) => {
 //   try {
 //     const postType = req.query.postType;
-//     const email = req.tokenInfo.email;
+//     const email = req.email.email;
 //     const page = Number(req.query.page);
 //     const perPage = Number(req.query.perPage);
 
@@ -169,7 +169,7 @@ const passwordHash = (password: string) => {
 // // 내가 좋아요 누른 게시글 불러오기
 // router.get("/mylike", authmiddleware, async (req, res, next) => {
 //   try {
-//     const email = req.tokenInfo.email;
+//     const email = req.email.email;
 //     const page = Number(req.query.page);
 //     const perPage = Number(req.query.perPage);
 
@@ -197,7 +197,7 @@ const passwordHash = (password: string) => {
 
 // router.put("/password/change", authmiddleware, async (req, res, next) => {
 //   try {
-//     const email = req.tokenInfo.email;
+//     const email = req.email.email;
 //     const { password } = req.body;
 
 //     let hashPassword = passwordHash(password);

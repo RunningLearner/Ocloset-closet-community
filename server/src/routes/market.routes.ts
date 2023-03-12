@@ -27,7 +27,7 @@ router.post(
     // req.body will hold the text fields, if there were any
     console.log(req.file);
     if (req.file) {
-      const email = req.tokenInfo.email;
+      const email = req.email.email;
       const title = req.body.title;
       const content = req.body.content;
       const price = Number(req.body.price);
@@ -101,7 +101,7 @@ router.get("/list/:shortId", authmiddleware, async (req, res, next) => {
         },
       ]);
     // 사용자와 게시글 작성자 비교
-    if (req.tokenInfo.email !== data.author.email) {
+    if (req.email.email !== data.author.email) {
       await Post.updateOne({ shortId: shortId }, { $inc: { views: 1 } });
       data = await Post.findOne({ shortId: shortId, show: true })
         .populate("author")
@@ -140,15 +140,15 @@ router.get("/list/:shortId", authmiddleware, async (req, res, next) => {
 router.put("/list/:shortId/update", authmiddleware, async (req, res, next) => {
   let { shortId } = req.params;
   let { title, content, price } = req.body;
-  const tokenInfo = req.tokenInfo;
+  const email = req.email;
 
   try {
     //작성자 검증
-    if (!tokenInfo) {
+    if (!email) {
       return next(new Error("로그인을 해주세요."));
     }
     const postUserId = await Post.findOne({ shortId }).populate("author");
-    if (tokenInfo.email !== postUserId.author.email) {
+    if (email.email !== postUserId.author.email) {
       return next(new Error("작성자가 아닙니다!"));
     }
     // shortId가 같은 데이터를 title, content를 update시켜줍니다.
@@ -178,15 +178,15 @@ router.delete(
   async (req, res, next) => {
     //shortId를 파라미터를 통해 가져옵니다.
     const { shortId } = req.params;
-    const tokenInfo = req.tokenInfo;
+    const email = req.email;
 
     try {
       //작성자 검증
-      if (!tokenInfo) {
+      if (!email) {
         return next(new Error("로그인을 해주세요."));
       }
       const postUserId = await Post.findOne({ shortId }).populate("author");
-      if (tokenInfo.email !== postUserId.author.email) {
+      if (email.email !== postUserId.author.email) {
         return next(new Error("작성자가 아닙니다!"));
       }
       //shortId에 해당하는 document를 삭제합니다.
@@ -210,7 +210,7 @@ router.post(
   async (req, res, next) => {
     const { shortId } = req.params;
     const { comment } = req.body;
-    const email = req.tokenInfo.email;
+    const email = req.email.email;
 
     try {
       const authData = await User.findOne({ email });
@@ -247,7 +247,7 @@ router.post(
   async (req, res, next) => {
     const { shortId, p_shortId } = req.params;
     const { comment } = req.body;
-    const email = req.tokenInfo.email;
+    const email = req.email.email;
 
     try {
       const authData = await User.findOne({ email });

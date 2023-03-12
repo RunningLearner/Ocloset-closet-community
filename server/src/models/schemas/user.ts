@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import shortId from "./type/shortId.js";
 
-interface User {
+export interface DBUser {
   shortId: String;
   email: String;
   password: String;
@@ -9,7 +9,7 @@ interface User {
   status: boolean;
 }
 
-const UserSchema = new mongoose.Schema<User>(
+const UserSchema = new mongoose.Schema<DBUser>(
   {
     shortId,
     email: String,
