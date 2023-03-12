@@ -2,13 +2,12 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "type": "module",
+  "main": "./src/index.ts",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "node dist/server.js",
     "build": "tsc -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon --watch 'src/**/*.ts' --exec ts-node ./src/index.ts",
+    "server": "nodemon server",
     "dev": "concurrently \"npm run server\" \"npm run front\""
   },
   "author": "",

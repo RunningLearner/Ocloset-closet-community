@@ -1,13 +1,12 @@
-import express, { NextFunction, Request, Response } from "express";
-// import router from "./routes/index";
+import express, { ErrorRequestHandler } from "express";
+import router from "./routes/index";
 import mongoose from "mongoose";
-import { createServer } from "http";
 // import { Server } from "socket.io";
 import cors from "cors";
 // import socket from "./util/socket";
 
 const app = express();
-const server = createServer(app);
+app.set("port", 8070);
 // const io = new Server(server, {
 //   cors: {
 //     origin: "http://localhost:3000",
@@ -40,23 +39,13 @@ app.get("/welcome", (_req, res) => {
 // app.use("/api", router);
 
 // 에러 핸들러
-app.use(function (
-  err: Error,
-  _req: Request,
-  res: Response,
-  _next: NextFunction
-) {
-  console.log("errermessage:  ", err.message, "\n\nerrorcode:  ");
-  res.json(err.message);
-});
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  console.error(err);
+  res.locals.message = err.message;
+  res.locals.error = process.env.NODE_ENV !== "production" ? err : {};
+  res.status(err.status || 500);
+  res.render("error");
+};
+app.use(errorHandler);
 
-const port = "8070";
-
-server.listen(port, () => {
-  console.log(`
-  ################################################
-  🛡️  Server listening on port: ${port}🛡️
-  ################################################
-    `);
-});
 export default app;
