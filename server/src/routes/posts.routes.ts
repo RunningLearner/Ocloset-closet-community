@@ -66,7 +66,7 @@ router.get("/list/:shortId", authmiddleware, async (req, res, next) => {
         },
       ]);
     // 사용자와 게시글 작성자 비교
-    if (req.tokenInfo.email !== data.author.email) {
+    if (req.email.email !== data.author.email) {
       await Post.updateOne({ shortId }, { $inc: { views: 1 } });
       data = await Post.findOne({ shortId, show: true })
         .populate("author")
@@ -108,7 +108,7 @@ router.post(
     // req.body will hold the text fields, if there were any
     console.log(req.file);
     if (req.file) {
-      const email = req.tokenInfo.email;
+      const email = req.email.email;
       const { content, title } = req.body;
       const authData = await User.findOne({ email });
       // console.log("--------------------\n\n\n", req.body, "\n2.\n", title, "\n4\n", content);
@@ -134,14 +134,14 @@ router.delete(
   authmiddleware,
   async (req, res, next) => {
     const { shortId } = req.params; // 객체이름과 params이름이 같아야 할당이 된다.
-    const tokenInfo = req.tokenInfo;
+    const email = req.email;
     try {
       //작성자 검증
-      if (!tokenInfo) {
+      if (!email) {
         return next(new Error("로그인을 해주세요."));
       }
       const postUserId = await Post.findOne({ shortId }).populate("author");
-      if (tokenInfo.email !== postUserId.author.email) {
+      if (email.email !== postUserId.author.email) {
         return next(new Error("작성자가 아닙니다!"));
       }
       await Post.updateOne({ shortId }, { show: false });
@@ -158,14 +158,14 @@ router.delete(
 router.put("/list/:shortId/update", authmiddleware, async (req, res, next) => {
   let { shortId } = req.params;
   let { title, content } = req.body;
-  const tokenInfo = req.tokenInfo;
+  const email = req.email;
   try {
     //작성자 검증
-    if (!tokenInfo) {
+    if (!email) {
       return next(new Error("로그인을 해주세요."));
     }
     const postUserId = await Post.findOne({ shortId }).populate("author");
-    if (tokenInfo.email !== postUserId.author.email) {
+    if (email.email !== postUserId.author.email) {
       return next(new Error("작성자가 아닙니다!"));
     }
 
@@ -191,7 +191,7 @@ router.post(
   async (req, res, next) => {
     const { shortId } = req.params;
     let { comment } = req.body;
-    const email = req.tokenInfo.email;
+    const email = req.email.email;
     try {
       const authData = await User.findOne({ email });
       const postData = await Post.findOne({ shortId }).populate("author");
@@ -222,7 +222,7 @@ router.post(
   async (req, res, next) => {
     const { shortId, p_shortId } = req.params;
     let { comment } = req.body;
-    const email = req.tokenInfo.email;
+    const email = req.email.email;
     try {
       const authData = await User.findOne({ email });
       const postData = await Post.findOne({ shortId });

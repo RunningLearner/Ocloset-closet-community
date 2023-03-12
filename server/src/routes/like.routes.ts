@@ -74,7 +74,7 @@ router.get("/getdislikes", async (req, res, next) => {
 
 //좋아요 누르기
 router.post("/uplike", async (req, res, next) => {
-  const email = req.tokenInfo.email;
+  const email = req.email.email;
   try {
     const userData = await User.findOne({ email: email });
     let postData = null;
@@ -134,7 +134,7 @@ router.post("/uplike", async (req, res, next) => {
 
 //싫어요 누르기
 router.post("/updislike", async (req, res, next) => {
-  const email = req.tokenInfo.email;
+  const email = req.email.email;
 
   try {
     const userData = await User.findOne({ email: email });
