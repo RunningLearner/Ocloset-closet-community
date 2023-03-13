@@ -1,8 +1,9 @@
 import mongoose, { Types } from "mongoose";
 import shortId from "./type/shortId.js";
 
-export interface DBPost {
-  shortId: string;
+export interface IPost {
+  // shortId: string;
+  _id: Types.ObjectId;
   title: string;
   content: string;
   show: boolean;
@@ -17,12 +18,12 @@ export interface DBPost {
     style: string;
   };
   author: Types.ObjectId;
-  comments: Types.ObjectId[];
+  comments?: Types.ObjectId[];
 }
 
-const PostSchema = new mongoose.Schema<DBPost>(
+const PostSchema = new mongoose.Schema<IPost>(
   {
-    shortId,
+    // shortId,
     title: String,
     content: String,
     show: {

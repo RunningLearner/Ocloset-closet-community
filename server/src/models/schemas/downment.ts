@@ -1,9 +1,19 @@
-import mongoose from "mongoose";
-import shortId from "./type/shortId.js";
+import mongoose, { Types } from "mongoose";
+// import shortId from "./type/shortId.js";
+
+export interface IDownment {
+  _id: Types.ObjectId;
+  comment: string;
+  show?: boolean;
+  postType: number;
+  author: Types.ObjectId;
+  post_id: Types.ObjectId;
+  parentment_id: Types.ObjectId;
+}
 
 const DownmentSchema = new mongoose.Schema(
   {
-    shortId,
+    // shortId,
     comment: String,
     show: {
       type: Boolean,

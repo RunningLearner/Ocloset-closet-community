@@ -2,7 +2,7 @@ import multer from "multer";
 import { Post, User } from "../models/index";
 import pathmodule from "path";
 import { RequestHandler } from "express";
-import { DBUser } from "../models/schemas/user";
+import { IUser } from "../models/schemas/user";
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -60,7 +60,7 @@ export const getList: RequestHandler = async (req, res, next) => {
     const email = req.email;
     const postsData = await Post.find({ postType: 1, show: true })
       .sort({ views: 1 }) //가장 먼저 업데이트된 게시글을 첫번째 인덱스로 가져옴
-      .populate<{ author: DBUser }>("author");
+      .populate<{ author: IUser }>("author");
 
     const posts = postsData.reduce((acc: Object[], it) => {
       if (it.author.email == email) {
@@ -85,7 +85,7 @@ export const deleteData: RequestHandler = async (req, res, next) => {
       return next(new Error("로그인을 해주세요."));
     }
     const postUserId = await Post.findOne({ shortId }).populate<{
-      author: DBUser;
+      author: IUser;
     }>("author");
 
     if (postUserId !== null && email !== postUserId.author.email) {
