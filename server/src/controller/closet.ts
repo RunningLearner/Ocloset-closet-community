@@ -1,19 +1,7 @@
-import multer from "multer";
 import { Post, User } from "../models/index";
 import pathmodule from "path";
 import { RequestHandler } from "express";
 import { IUser } from "../models/schemas/user";
-
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, "images/");
-  },
-  filename(req, file, cb) {
-    cb(null, `${Date.now()}__${file.originalname}`);
-  },
-});
-
-const upload = multer({ storage: storage });
 
 export const createData: RequestHandler = async function (req, res, next) {
   // req.file is the name of your file in the form above, here 'uploaded_file'
