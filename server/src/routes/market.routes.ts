@@ -1,56 +1,12 @@
 import { Router } from "express";
-import multer from "multer";
-import { Downment, Post, Upment, User } from "../models/index";
-import pathmodule from "path";
-import authmiddleware from "../util/authmiddleware.js";
+import authmiddleware from "../util/authmiddleware";
+import { upload } from "../util/upload";
 
 export const path = "/market";
 export const router = Router();
 
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, "images/");
-  },
-  filename(req, file, cb) {
-    cb(null, `${Date.now()}__${file.originalname}`);
-  },
-});
-const upload = multer({ storage: storage });
-
 // 게시글 생성하기
-router.post(
-  "/create",
-  authmiddleware,
-  upload.single("img"),
-  async function (req, res, next) {
-    // req.file is the name of your file in the form above, here 'uploaded_file'
-    // req.body will hold the text fields, if there were any
-    console.log(req.file);
-    if (req.file) {
-      const email = req.email.email;
-      const title = req.body.title;
-      const content = req.body.content;
-      const price = Number(req.body.price);
-      const authData = await User.findOne({ email });
-      const url = req.file.destination + pathmodule.basename(req.file.path);
-
-      // console.log("--------------------\n\n\n", req.body, "\n2.\n", type,"\n3\n", email,"\n4\n", postType);
-      await Post.create({
-        postType: 3,
-        price: price,
-        title: title,
-        content: content,
-        img: {
-          url: url,
-        },
-        author: authData,
-      });
-      res.status(200).json({ data: "게시글 업로드에 성공했습니다!" });
-    } else {
-      next(new Error("게시글 업로드에 실패하였습니다. 에러코드 추가필요"));
-    }
-  }
-);
+router.post("/create", authmiddleware, upload.single("imageFile"), createPost);
 
 //게시글 목록 불러오기
 router.get("/list", async (req, res, next) => {
