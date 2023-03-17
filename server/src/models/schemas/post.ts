@@ -1,9 +1,6 @@
 import mongoose, { Types } from "mongoose";
-import shortId from "./type/shortId.js";
 
 export interface IPost {
-  // shortId: string;
-  _id: Types.ObjectId;
   title: string;
   content: string;
   show: boolean;
@@ -23,7 +20,6 @@ export interface IPost {
 
 const PostSchema = new mongoose.Schema<IPost>(
   {
-    // shortId,
     title: String,
     content: String,
     show: {
