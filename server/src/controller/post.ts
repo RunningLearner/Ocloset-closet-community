@@ -1,13 +1,10 @@
 import { Router } from "express";
-import { Document } from "mongoose";
 import multer from "multer";
 import { Post, User, Upment, Downment } from "../models/index";
 import pathmodule from "path";
-import authmiddleware from "../util/authmiddleware.js";
 import { RequestHandler } from "express";
 import { IUser } from "../models/schemas/user";
 import { IUpment } from "../models/schemas/upment";
-import { IPost } from "../models/schemas/post";
 
 export const path = "/posts";
 export const router = Router();
@@ -232,8 +229,8 @@ export const createReply: RequestHandler = async (req, res, next) => {
   const email = req.email;
   try {
     const authData = await User.findOne({ email });
-    const postData = await Post.findOne({ shortId });
-    const parentData = await Upment.findOne({ shortId: p_shortId });
+    const postData = await Post.findOne({ _id: shortId });
+    const parentData = await Upment.findOne({ _id: p_shortId });
 
     const newcomment = await Downment.create({
       postType: 2,
@@ -245,7 +242,7 @@ export const createReply: RequestHandler = async (req, res, next) => {
 
     await Upment.updateOne(
       { _id: p_shortId },
-      { $push: { comments: newcomment } }
+      { $push: { comments: newcomment._id } }
     );
 
     res.status(200).json({
