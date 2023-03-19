@@ -201,17 +201,20 @@ export const createComment: RequestHandler = async (req, res, next) => {
       throw new Error("Post not found.");
     }
 
-    const newComment: IUpment = (await Upment.create({
+    const newComment = await Upment.create({
       comment: comment,
       postType: 2,
       author: authData._id,
       post_id: postData._id,
-    })) as unknown as IUpment;
+    });
     if (!newComment) {
       throw new Error("newComment not found.");
     }
 
-    await Post.updateOne({ shortId }, { $push: { comments: newComment._id } });
+    await Post.updateOne(
+      { _id: shortId },
+      { $push: { comments: newComment._id } }
+    );
 
     res.status(200).json({
       result: "댓글이 작성 되었습니다.",

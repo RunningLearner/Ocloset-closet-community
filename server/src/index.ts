@@ -36,7 +36,7 @@ app.get("/welcome", (_req, res) => {
 });
 
 // dev route
-// app.use("/api", router);
+app.use("/api", router);
 
 // 에러 핸들러
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {

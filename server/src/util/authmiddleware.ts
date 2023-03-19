@@ -1,3 +1,4 @@
+/// <reference path="../@types/express/index.d.ts" />
 import jwt from "jsonwebtoken";
 import jwtConfig from "../config/jwtConfig.js";
 import { RequestHandler } from "express";
@@ -18,6 +19,7 @@ const authmiddleware: RequestHandler = async (req, res, next) => {
 
       //request의 email부분에 토큰의 인증에 사용된 값을 저장합니다.
       req.email = (decoded as { email: string }).email;
+
       console.log("email:", req.email);
       //미들웨어로써 동작하기 때문에 next()를 작성해 주셔야 다음 미들웨어가 동작합니다.
       next();
