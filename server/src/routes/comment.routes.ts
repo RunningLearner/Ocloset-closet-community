@@ -1,77 +1,9 @@
 import { Router } from "express";
-import { Post, Upment, Downment } from "../models/index";
+import { updateComment, deleteComment } from "../controller/comment";
 
 export const path = "/comment";
 export const router = Router();
 
-router.put("/update/:shortId", async (req, res, next) => {
-  const { content } = req.body;
-  const { shortId } = req.params;
-  const email = req.email;
-  let comment = {};
+router.put("/update/:shortId", updateComment);
 
-  try {
-    comment = await Upment.findOne({ shortId });
-    if (comment) {
-      //작성자 검증
-      if (!email) {
-        return next(new Error("로그인을 해주세요."));
-      }
-      const postUserId = await Upment.findOne({ shortId }).populate("author");
-      if (email.email !== postUserId.author.email) {
-        return next(new Error("작성자가 아닙니다!"));
-      }
-
-      await Upment.updateOne({ shortId }, { comment: content });
-      res.status(200).json({ result: "수정이 완료되었습니다." });
-    } else {
-      if (!email) {
-        return next(new Error("로그인을 해주세요."));
-      }
-      const postUserId = await Downment.findOne({ shortId }).populate("author");
-      if (email.email !== postUserId.author.email) {
-        return next(new Error("작성자가 아닙니다!"));
-      }
-      await Downment.updateOne({ shortId }, { comment: content });
-      res.status(200).json({ result: "수정이 완료되었습니다." });
-    }
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.delete("/delete/:shortId", async (req, res, next) => {
-  const { shortId } = req.params;
-  const email = req.email;
-  let comment = {};
-
-  try {
-    comment = await Upment.findOne({ shortId });
-    if (comment) {
-      //작성자 검증
-      if (!email) {
-        return next(new Error("로그인을 해주세요."));
-      }
-      const postUserId = await Upment.findOne({ shortId }).populate("author");
-      if (email.email !== postUserId.author.email) {
-        return next(new Error("작성자가 아닙니다!"));
-      }
-
-      await Upment.updateOne({ shortId }, { show: false });
-      res.status(200).json({ result: "삭제가 완료되었습니다." });
-    } else {
-      if (!email) {
-        return next(new Error("로그인을 해주세요."));
-      }
-      const postUserId = await Downment.findOne({ shortId }).populate("author");
-      if (email.email !== postUserId.author.email) {
-        return next(new Error("작성자가 아닙니다!"));
-      }
-
-      await Downment.updateOne({ shortId }, { show: false });
-      res.status(200).json({ result: "삭제가 완료되었습니다." });
-    }
-  } catch (err) {
-    next(err);
-  }
-});
+router.delete("/delete/:shortId", deleteComment);

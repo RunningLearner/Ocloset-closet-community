@@ -1,7 +1,6 @@
 import mongoose, { Types } from "mongoose";
 
 export interface IUpment {
-  _id: Types.ObjectId;
   comment: string;
   show?: boolean;
   postType: number;
