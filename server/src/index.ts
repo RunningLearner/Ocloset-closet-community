@@ -1,18 +1,13 @@
 import express, { ErrorRequestHandler } from "express";
 import router from "./routes/index";
 import mongoose from "mongoose";
-// import { Server } from "socket.io";
 import cors from "cors";
-// import socket from "./util/socket";
+import { createServer } from "http";
+import Socket from "./util/socket";
 
 const app = express();
+const httpServer = createServer(app);
 app.set("port", 8070);
-// const io = new Server(server, {
-//   cors: {
-//     origin: "http://localhost:3000",
-//     credentials: true,
-//   },
-// });
 
 mongoose.connect("mongodb://localhost:27017/Ocloset");
 
@@ -29,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("images"));
 
 // socket 파일에 객체 전달
-// socket(io);
+Socket(httpServer);
 
 app.get("/welcome", (_req, res) => {
   res.send("welcome!");
