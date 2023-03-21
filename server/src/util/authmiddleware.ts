@@ -1,4 +1,3 @@
-/// <reference path="../@types/express/index.d.ts" />
 import jwt from "jsonwebtoken";
 import jwtConfig from "../config/jwtConfig.js";
 import { RequestHandler } from "express";
