@@ -4,10 +4,6 @@ import { Post, User, Upment, Downment } from "../models/index";
 import pathmodule from "path";
 import { RequestHandler } from "express";
 import { IUser } from "../models/schemas/user";
-import { IUpment } from "../models/schemas/upment";
-
-export const path = "/posts";
-export const router = Router();
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {

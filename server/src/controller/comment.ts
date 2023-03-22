@@ -2,9 +2,6 @@ import { RequestHandler, Router } from "express";
 import { Upment, Downment } from "../models/index";
 import { IUser } from "../models/schemas/user";
 
-export const path = "/comment";
-export const router = Router();
-
 export const updateComment: RequestHandler = async (req, res, next) => {
   const { content } = req.body;
   const { shortId } = req.params;

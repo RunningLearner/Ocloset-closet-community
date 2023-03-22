@@ -1,9 +1,6 @@
 import { RequestHandler, Router } from "express";
 import { Post } from "../models/index";
 
-export const path = "/movepost";
-export const router = Router();
-
 export const nextPost: RequestHandler = async (req, res, next) => {
   const { _id, postType } = req.query;
   try {

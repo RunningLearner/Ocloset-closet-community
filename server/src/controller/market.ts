@@ -4,9 +4,6 @@ import { Downment, Post, Upment, User } from "../models/index";
 import pathmodule from "path";
 import { IUser } from "../models/schemas/user";
 
-export const path = "/market";
-export const router = Router();
-
 // 게시글 생성하기
 export const createPost: RequestHandler = async function (req, res, next) {
   // req.file is the name of your file in the form above, here 'uploaded_file'

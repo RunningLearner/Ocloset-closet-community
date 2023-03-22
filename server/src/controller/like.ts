@@ -1,10 +1,6 @@
 import { RequestHandler, Router } from "express";
-import { Types } from "mongoose";
 import { Dislike, Downment, Like, Post, Upment, User } from "../models/index";
 import { IUser } from "../models/schemas/user";
-
-export const path = "/like";
-export const router = Router();
 
 //좋아요 가져오기
 export const getLike: RequestHandler = async (req, res, next) => {

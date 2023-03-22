@@ -2,9 +2,6 @@ import { RequestHandler, Router } from "express";
 import { Post, User } from "../models/index";
 import { IUser } from "../models/schemas/user";
 
-export const path = "/search";
-export const router = Router();
-
 export const searchPost: RequestHandler = async (req, res, next) => {
   const postType = req.query.postType;
   const page = Number(req.query.page);
